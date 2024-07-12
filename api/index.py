@@ -132,7 +132,6 @@ def move(game_state: typing.Dict) -> typing.Dict:
     #print(my_body[0])
 
     my_body_length = len(game_state["you"]["body"])
-    opponent_length = len(opponents[1])
 
     if my_neck["x"] < my_head["x"]:
         lvalue = -100
