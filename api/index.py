@@ -1,10 +1,8 @@
 import logging
 import os
 import typing
-import flask
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from collections import deque
-
 
 def run_server(handlers: typing.Dict):
     app = Flask(__name__)
@@ -33,8 +31,13 @@ def run_server(handlers: typing.Dict):
 
     @app.after_request
     def identify_server(response):
-        response.headers.set("server",
-                             "battlesnake/github/starter-snake-python")
+        response.headers.set("server", "battlesnake/github/starter-snake-python")
+        return response
+
+    @app.errorhandler(500)
+    def internal_error(error):
+        response = jsonify({"message": "Internal server error", "error": str(error)})
+        response.status_code = 500
         return response
 
     host = "0.0.0.0"
@@ -43,10 +46,8 @@ def run_server(handlers: typing.Dict):
     print(f"\nRunning Battlesnake at http://{host}:{port}")
     app.run(host=host, port=port)
 
-
 import random
 import typing
-
 
 def info() -> typing.Dict:
     print("INFO")
@@ -58,31 +59,22 @@ def info() -> typing.Dict:
         "tail": "bolt",
     }
 
-
 def start(game_state: typing.Dict):
     global start_snake_count
     start_snake_count = len(game_state['board']['snakes'])
     print("GAME START with ", start_snake_count, " snakes")
 
-
 def end(game_state: typing.Dict):
-    print("GAME OVER!    Right:", rvalue, " Left:", lvalue, " Up:", uvalue,
-          " Down:", dvalue)
-
+    print("GAME OVER!    Right:", rvalue, " Left:", lvalue, " Up:", uvalue, " Down:", dvalue)
 
 def flood_fill(board, x, y, visited):
-    if x < 0 or y < 0 or x >= len(board) or y >= len(
-            board[0]) or board[x][y] == 1 or visited[x][y]:
+    if x < 0 or y < 0 or x >= len(board) or y >= len(board[0]) or board[x][y] == 1 or visited[x][y]:
         return 0
     visited[x][y] = True
-    return 1 + flood_fill(board, x + 1, y, visited) + flood_fill(
-        board, x - 1, y, visited) + flood_fill(
-            board, x, y + 1, visited) + flood_fill(board, x, y - 1, visited)
-
+    return 1 + flood_fill(board, x + 1, y, visited) + flood_fill(board, x - 1, y, visited) + flood_fill(board, x, y + 1, visited) + flood_fill(board, x, y - 1, visited)
 
 def get_flood_fill_area(game_state, head):
-    board = [[0] * game_state['board']['height']
-             for _ in range(game_state['board']['width'])]
+    board = [[0] * game_state['board']['height'] for _ in range(game_state['board']['width'])]
 
     # Mark all opponent snakes' segments as occupied
     for snake in game_state['board']['snakes']:
@@ -93,10 +85,8 @@ def get_flood_fill_area(game_state, head):
     for i, segment in enumerate(game_state['you']['body'][:-5]):
         board[segment['x']][segment['y']] = 1
 
-    visited = [[False] * game_state['board']['height']
-               for _ in range(game_state['board']['width'])]
+    visited = [[False] * game_state['board']['height'] for _ in range(game_state['board']['width'])]
     return flood_fill(board, head['x'], head['y'], visited)
-
 
 def bfs_shortest_path(game_state, start, food):
     directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
@@ -116,17 +106,10 @@ def bfs_shortest_path(game_state, start, food):
             return path
 
         for direction in directions:
-            neighbor = {
-                'x': current['x'] + direction[0],
-                'y': current['y'] + direction[1]
-            }
-            if 0 <= neighbor['x'] < game_state['board'][
-                    'width'] and 0 <= neighbor['y'] < game_state['board'][
-                        'height']:
+            neighbor = {'x': current['x'] + direction[0], 'y': current['y'] + direction[1]}
+            if 0 <= neighbor['x'] < game_state['board']['width'] and 0 <= neighbor['y'] < game_state['board']['height']:
                 if (neighbor['x'], neighbor['y']) not in visited:
-                    if neighbor not in game_state['you']['body'] and all(
-                            neighbor not in snake['body']
-                            for snake in game_state['board']['snakes']):
+                    if neighbor not in game_state['you']['body'] and all(neighbor not in snake['body'] for snake in game_state['board']['snakes']):
                         queue.append(neighbor)
                         visited.add((neighbor['x'], neighbor['y']))
                         parent[(neighbor['x'], neighbor['y'])] = current
