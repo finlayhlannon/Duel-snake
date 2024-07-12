@@ -559,21 +559,6 @@ def move(game_state: typing.Dict) -> typing.Dict:
             uvalue += 0
             dvalue += 0
 
-    max_value = max(rvalue, lvalue, uvalue, dvalue)
-
-    if rvalue == max_value:
-        move = "right"
-        print(rvalue)
-    elif lvalue == max_value:
-        move = "left"
-        print(lvalue)
-    elif uvalue == max_value:
-        move = "up"
-        print(uvalue)
-    else:
-        move = "down"
-        print(dvalue)
-
 
     #If on wall, move away from opponent head
     #print('opponents y head', opponents[1][0]['y'])
@@ -598,8 +583,23 @@ def move(game_state: typing.Dict) -> typing.Dict:
         if my_head["y"] >= board_height - 1 and my_head["x"] > opponents[1][0]['x']:
             lvalue -= 10
 
+
+    max_value = max(rvalue, lvalue, uvalue, dvalue)
+
+    if rvalue == max_value:
+        move = "right"
+        print('right:', rvalue, ' left:', lvalue, ' up:', uvalue, ' down:', dvalue)
+    elif lvalue == max_value:
+        move = "left"
+        print('right:', rvalue, ' left:', lvalue, ' up:', uvalue, ' down:', dvalue)
+    elif uvalue == max_value:
+        move = "up"
+        print('right:', rvalue, ' left:', lvalue, ' up:', uvalue, ' down:', dvalue)
+    else:
+        move = "down"
+        print('right:', rvalue, ' left:', lvalue, ' up:', uvalue, ' down:', dvalue)
+
     return {"move": move}
 
 if __name__ == "__main__":
     handlers = {"info": info, "start": start, "move": move, "end": end}
-    run_server(handlers)
