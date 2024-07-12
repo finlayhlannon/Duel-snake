@@ -41,7 +41,7 @@ def run_server(handlers: typing.Dict):
     port = int(os.environ.get("PORT", "8000"))
     logging.getLogger("werkzeug").setLevel(logging.ERROR)
     print(f"\nRunning Battlesnake at http://{host}:{port}")
-    app.run(host=host, port=port)
+    #app.run(host=host, port=port)
 
 
 import random
