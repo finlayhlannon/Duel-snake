@@ -168,15 +168,18 @@ def move(game_state: typing.Dict) -> typing.Dict:
         dvalue -= 100
     if {'x': my_head['x'], 'y': my_head["y"] + 1} in my_body:
         uvalue -= 100
-
-    if {'x': my_head["x"] + 1, 'y': my_head["y"]} in opponents[1]:
-        rvalue -= 100
-    if {'x': my_head["x"] - 1, 'y': my_head["y"]} in opponents[1]:
-        lvalue -= 100
-    if {'x': my_head['x'], 'y': my_head["y"] - 1} in opponents[1]:
-        dvalue -= 100
-    if {'x': my_head['x'], 'y': my_head["y"] + 1} in opponents[1]:
-        uvalue -= 100
+        
+    if start_snake_count >= 2:
+        if {'x': my_head["x"] + 1, 'y': my_head["y"]} in opponents[1]:
+            rvalue -= 100
+        if {'x': my_head["x"] - 1, 'y': my_head["y"]} in opponents[1]:
+            lvalue -= 100
+        if {'x': my_head['x'], 'y': my_head["y"] - 1} in opponents[1]:
+            dvalue -= 100
+        if {'x': my_head['x'], 'y': my_head["y"] + 1} in opponents[1]:
+            uvalue -= 100
+    else:
+        pass
 
     # Straight head-on collision
     if start_snake_count == 1:
