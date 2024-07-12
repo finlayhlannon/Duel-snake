@@ -53,8 +53,8 @@ def info() -> typing.Dict:
         "apiversion": "1",
         "author": "Finlay",
         "color": "#000000",
-        "head": "smart-caterpillar",
-        "tail": "bolt",
+        "head": "silly",
+        "tail": "curled",
     }
 
 def start(game_state: typing.Dict):
