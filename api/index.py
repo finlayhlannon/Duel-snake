@@ -577,25 +577,26 @@ def move(game_state: typing.Dict) -> typing.Dict:
 
     #If on wall, move away from opponent head
     #print('opponents y head', opponents[1][0]['y'])
-    if my_head["x"] <= 0 and my_head["y"] < opponents[1][0]['y']:
-        uvalue -= 10
-    if my_head["x"] <= 0 and my_head["y"] > opponents[1][0]['y']:
-        dvalue -= 10
-        
-    if my_head["x"] >= board_width - 1 and my_head["y"] < opponents[1][0]['y']:
-        uvalue -= 10
-    if my_head["x"] >= board_width - 1 and my_head["y"] > opponents[1][0]['y']:
-        dvalue -= 10
-        
-    if my_head["y"] <= 0 and my_head["x"] < opponents[1][0]['x']:
-        rvalue -= 10
-    if my_head["y"] <= 0 and my_head["x"] > opponents[1][0]['x']:
-        lvalue -= 10
-        
-    if my_head["y"] >= board_height - 1 and my_head["x"] < opponents[1][0]['x']:
-        rvalue -= 10
-    if my_head["y"] >= board_height - 1 and my_head["x"] > opponents[1][0]['x']:
-        lvalue -= 10
+    if opponents >= 2:
+        if my_head["x"] <= 0 and my_head["y"] < opponents[1][0]['y']:
+            uvalue -= 10
+        if my_head["x"] <= 0 and my_head["y"] > opponents[1][0]['y']:
+            dvalue -= 10
+            
+        if my_head["x"] >= board_width - 1 and my_head["y"] < opponents[1][0]['y']:
+            uvalue -= 10
+        if my_head["x"] >= board_width - 1 and my_head["y"] > opponents[1][0]['y']:
+            dvalue -= 10
+            
+        if my_head["y"] <= 0 and my_head["x"] < opponents[1][0]['x']:
+            rvalue -= 10
+        if my_head["y"] <= 0 and my_head["x"] > opponents[1][0]['x']:
+            lvalue -= 10
+            
+        if my_head["y"] >= board_height - 1 and my_head["x"] < opponents[1][0]['x']:
+            rvalue -= 10
+        if my_head["y"] >= board_height - 1 and my_head["x"] > opponents[1][0]['x']:
+            lvalue -= 10
 
     return {"move": move}
 
