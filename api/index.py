@@ -1,51 +1,52 @@
 import logging
 import os
 import typing
-from flask import Flask, request, jsonify
+import flask
+from flask import Flask, request
 from collections import deque
 
-app = Flask(__name__)
 
-@app.get("/")
-def on_info():
-    return info()
+def run_server(handlers: typing.Dict):
+    app = Flask(__name__)
 
-@app.post("/start")
-def on_start():
-    print("go!")
-    game_state = request.get_json()
-    start(game_state)
-    return "ok"
+    @app.get("/")
+    def on_info():
+        return handlers["info"]()
 
-@app.post("/move")
-def on_move():
-    game_state = request.get_json()
-    return move(game_state)
+    @app.post("/start")
+    def on_start():
+        print("go!")
+        game_state = request.get_json()
+        handlers["start"](game_state)
+        return "ok"
 
-@app.post("/end")
-def on_end():
-    game_state = request.get_json()
-    end(game_state)
-    return "ok"
+    @app.post("/move")
+    def on_move():
+        game_state = request.get_json()
+        return handlers["move"](game_state)
 
-@app.after_request
-def identify_server(response):
-    response.headers.set("server", "battlesnake/github/starter-snake-python")
-    return response
+    @app.post("/end")
+    def on_end():
+        game_state = request.get_json()
+        handlers["end"](game_state)
+        return "ok"
 
-@app.errorhandler(500)
-def internal_error(error):
-    response = jsonify({"message": "Internal server error", "error": str(error)})
-    response.status_code = 500
-    return response
+    @app.after_request
+    def identify_server(response):
+        response.headers.set("server",
+                             "battlesnake/github/starter-snake-python")
+        return response
 
-host = "0.0.0.0"
-port = int(os.environ.get("PORT", "8000"))
-logging.getLogger("werkzeug").setLevel(logging.ERROR)
-print(f"\nRunning Battlesnake at http://{host}:{port}")
+    host = "0.0.0.0"
+    port = int(os.environ.get("PORT", "8000"))
+    logging.getLogger("werkzeug").setLevel(logging.ERROR)
+    print(f"\nRunning Battlesnake at http://{host}:{port}")
+    app.run(host=host, port=port)
+
 
 import random
 import typing
+
 
 def info() -> typing.Dict:
     print("INFO")
@@ -57,22 +58,31 @@ def info() -> typing.Dict:
         "tail": "curled",
     }
 
+
 def start(game_state: typing.Dict):
     global start_snake_count
     start_snake_count = len(game_state['board']['snakes'])
     print("GAME START with ", start_snake_count, " snakes")
 
+
 def end(game_state: typing.Dict):
-    print("GAME OVER!    Right:", rvalue, " Left:", lvalue, " Up:", uvalue, " Down:", dvalue)
+    print("GAME OVER!    Right:", rvalue, " Left:", lvalue, " Up:", uvalue,
+          " Down:", dvalue)
+
 
 def flood_fill(board, x, y, visited):
-    if x < 0 or y < 0 or x >= len(board) or y >= len(board[0]) or board[x][y] == 1 or visited[x][y]:
+    if x < 0 or y < 0 or x >= len(board) or y >= len(
+            board[0]) or board[x][y] == 1 or visited[x][y]:
         return 0
     visited[x][y] = True
-    return 1 + flood_fill(board, x + 1, y, visited) + flood_fill(board, x - 1, y, visited) + flood_fill(board, x, y + 1, visited) + flood_fill(board, x, y - 1, visited)
+    return 1 + flood_fill(board, x + 1, y, visited) + flood_fill(
+        board, x - 1, y, visited) + flood_fill(
+            board, x, y + 1, visited) + flood_fill(board, x, y - 1, visited)
+
 
 def get_flood_fill_area(game_state, head):
-    board = [[0] * game_state['board']['height'] for _ in range(game_state['board']['width'])]
+    board = [[0] * game_state['board']['height']
+             for _ in range(game_state['board']['width'])]
 
     # Mark all opponent snakes' segments as occupied
     for snake in game_state['board']['snakes']:
@@ -83,8 +93,10 @@ def get_flood_fill_area(game_state, head):
     for i, segment in enumerate(game_state['you']['body'][:-5]):
         board[segment['x']][segment['y']] = 1
 
-    visited = [[False] * game_state['board']['height'] for _ in range(game_state['board']['width'])]
+    visited = [[False] * game_state['board']['height']
+               for _ in range(game_state['board']['width'])]
     return flood_fill(board, head['x'], head['y'], visited)
+
 
 def bfs_shortest_path(game_state, start, food):
     directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
@@ -104,10 +116,17 @@ def bfs_shortest_path(game_state, start, food):
             return path
 
         for direction in directions:
-            neighbor = {'x': current['x'] + direction[0], 'y': current['y'] + direction[1]}
-            if 0 <= neighbor['x'] < game_state['board']['width'] and 0 <= neighbor['y'] < game_state['board']['height']:
+            neighbor = {
+                'x': current['x'] + direction[0],
+                'y': current['y'] + direction[1]
+            }
+            if 0 <= neighbor['x'] < game_state['board'][
+                    'width'] and 0 <= neighbor['y'] < game_state['board'][
+                        'height']:
                 if (neighbor['x'], neighbor['y']) not in visited:
-                    if neighbor not in game_state['you']['body'] and all(neighbor not in snake['body'] for snake in game_state['board']['snakes']):
+                    if neighbor not in game_state['you']['body'] and all(
+                            neighbor not in snake['body']
+                            for snake in game_state['board']['snakes']):
                         queue.append(neighbor)
                         visited.add((neighbor['x'], neighbor['y']))
                         parent[(neighbor['x'], neighbor['y'])] = current
@@ -168,7 +187,7 @@ def move(game_state: typing.Dict) -> typing.Dict:
         dvalue -= 100
     if {'x': my_head['x'], 'y': my_head["y"] + 1} in my_body:
         uvalue -= 100
-        
+
     if start_snake_count >= 2:
         if {'x': my_head["x"] + 1, 'y': my_head["y"]} in opponents[1]:
             rvalue -= 100
@@ -180,6 +199,7 @@ def move(game_state: typing.Dict) -> typing.Dict:
             uvalue -= 100
     else:
         pass
+
 
     # Straight head-on collision
     if start_snake_count == 1:
@@ -559,21 +579,6 @@ def move(game_state: typing.Dict) -> typing.Dict:
             uvalue += 0
             dvalue += 0
 
-    max_value = max(rvalue, lvalue, uvalue, dvalue)
-
-    if rvalue == max_value:
-        move = "right"
-        print(rvalue)
-    elif lvalue == max_value:
-        move = "left"
-        print(lvalue)
-    elif uvalue == max_value:
-        move = "up"
-        print(uvalue)
-    else:
-        move = "down"
-        print(dvalue)
-
 
     #If on wall, move away from opponent head
     #print('opponents y head', opponents[1][0]['y'])
@@ -597,6 +602,22 @@ def move(game_state: typing.Dict) -> typing.Dict:
             rvalue -= 10
         if my_head["y"] >= board_height - 1 and my_head["x"] > opponents[1][0]['x']:
             lvalue -= 10
+
+            
+    max_value = max(rvalue, lvalue, uvalue, dvalue)
+    if rvalue == max_value:
+        move = "right"
+        print('right:', rvalue, ' left:', lvalue, ' up:', uvalue, ' down:', dvalue)
+    elif lvalue == max_value:
+        move = "left"
+        print('right:', rvalue, ' left:', lvalue, ' up:', uvalue, ' down:', dvalue)
+    elif uvalue == max_value:
+        move = "up"
+        print('right:', rvalue, ' left:', lvalue, ' up:', uvalue, ' down:', dvalue)
+    else:
+        move = "down"
+        print('right:', rvalue, ' left:', lvalue, ' up:', uvalue, ' down:', dvalue)
+
 
     return {"move": move}
 
