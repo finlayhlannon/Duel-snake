@@ -134,22 +134,22 @@ def move(game_state: typing.Dict) -> typing.Dict:
     my_body_length = len(game_state["you"]["body"])
 
     if my_neck["x"] < my_head["x"]:
-        lvalue = -100
+        lvalue = -1000
     elif my_neck["x"] > my_head["x"]:
-        rvalue = -100
+        rvalue = -1000
     elif my_neck["y"] < my_head["y"]:
-        dvalue = -100
+        dvalue = -1000
     elif my_neck["y"] > my_head["y"]:
-        uvalue = -100
+        uvalue = -1000
 
     if my_head["x"] <= 0:
-        lvalue -= 100
+        lvalue -= 1000
     if my_head["x"] >= board_width - 1:
-        rvalue -= 100
+        rvalue -= 1000
     if my_head["y"] <= 0:
-        dvalue -= 100
+        dvalue -= 1000
     if my_head["y"] >= board_height - 1:
-        uvalue -= 100
+        uvalue -= 1000
 
     if my_head["x"] <= 1:
         lvalue -= 2
