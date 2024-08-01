@@ -1,4 +1,4 @@
-import logging
+eimport logging
 import os
 import typing
 from flask import Flask, request, jsonify
@@ -130,6 +130,10 @@ def move(game_state: typing.Dict) -> typing.Dict:
     for snakes in game_state['board']['snakes']:
         opponents.append(snakes['body'])
     real_me_body = game_state['board']['snakes'][0]['body']
+
+    for snakes in game_state['board']['snakes']
+        real_opponents = game_state['board']['snakes'][snakes]['body']
+    print(real_opponents)
     if start_snake_count >= 2:
         real_opponent1_body = game_state['board']['snakes'][1]['body']
     if start_snake_count >= 3:
