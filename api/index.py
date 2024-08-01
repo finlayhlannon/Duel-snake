@@ -54,7 +54,7 @@ def info() -> typing.Dict:
         "author": "Finlay",
         "color": "#12A434",
         "head": "lantern-fish",
-        "tail": "curled",
+        "tail": "do-sammy",
     }
 
 def start(game_state: typing.Dict):
