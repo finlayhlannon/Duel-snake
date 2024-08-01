@@ -494,9 +494,8 @@ def move(game_state: typing.Dict) -> typing.Dict:
             lvalue += 2
         else:
             lvalue -= 2
-    for snakes in game_state['board']['snakes']:
-        if my_body_length > opponents[0]['length']:
-            print("Im the biggest bird")
+    if my_body_length > opponent1_length:
+        print("Im the biggest bird")
     # BFS for food
     nearest_food_path = bfs_shortest_path(game_state, my_head, set((f['x'], f['y']) for f in food))
     if nearest_food_path and len(nearest_food_path) > 1:
