@@ -132,7 +132,7 @@ def move(game_state: typing.Dict) -> typing.Dict:
     real_me_body = game_state['board']['snakes'][0]['body']
 
     for snakes in game_state['board']['snakes']
-        real_opponents = game_state['board']['snakes'][snakes]['body']
+        real_opponents = snakes['body']
     print(real_opponents)
     if start_snake_count >= 2:
         real_opponent1_body = game_state['board']['snakes'][1]['body']
