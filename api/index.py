@@ -53,7 +53,7 @@ def info() -> typing.Dict:
         "apiversion": "1",
         "author": "Finlay",
         "color": "#12A434",
-        "head": "silly",
+        "head": "lantern-fish",
         "tail": "curled",
     }
 
