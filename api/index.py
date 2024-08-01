@@ -129,8 +129,8 @@ def move(game_state: typing.Dict) -> typing.Dict:
     opponents = []
     for snakes in game_state['board']['snakes']:
         opponents.append(snakes['body'])
-    print(opponents[1])
-    print(opponents[1][0])
+    real_opponent = game_state['board']['snakes'][1]
+    print(real_opponent)
     #print(opponents[start_snake_count - 1][0])
     #print(my_body[0])
 
