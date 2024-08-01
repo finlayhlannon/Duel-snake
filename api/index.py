@@ -494,21 +494,42 @@ def move(game_state: typing.Dict) -> typing.Dict:
             lvalue += 2
         else:
             lvalue -= 2
-    if my_body_length > opponent1_length:
-        print("Im the biggest bird")
+    
     # BFS for food
     nearest_food_path = bfs_shortest_path(game_state, my_head, set((f['x'], f['y']) for f in food))
     if nearest_food_path and len(nearest_food_path) > 1:
         next_move = nearest_food_path[1]
-        
-        if next_move['x'] > my_head['x']:
-            rvalue += 10
-        elif next_move['x'] < my_head['x']:
-            lvalue += 10
-        elif next_move['y'] > my_head['y']:
-            uvalue += 10
-        elif next_move['y'] < my_head['y']:
-            dvalue += 10
+        if start_snake_count == 2:
+            if my_body_length > opponent1_length:
+                print("Im the biggest bird")
+                if next_move['x'] > my_head['x']:
+                    rvalue -= 10
+                elif next_move['x'] < my_head['x']:
+                    lvalue -= 10
+                elif next_move['y'] > my_head['y']:
+                    uvalue -= 10
+                elif next_move['y'] < my_head['y']:
+                    dvalue -= 10
+            else:
+                print("Im the smallest bird")
+                if next_move['x'] > my_head['x']:
+                    rvalue += 10
+                elif next_move['x'] < my_head['x']:
+                    lvalue += 10
+                elif next_move['y'] > my_head['y']:
+                    uvalue += 10
+                elif next_move['y'] < my_head['y']:
+                    dvalue += 10
+
+        else:
+            if next_move['x'] > my_head['x']:
+                rvalue += 10
+            elif next_move['x'] < my_head['x']:
+                lvalue += 10
+            elif next_move['y'] > my_head['y']:
+                uvalue += 10
+            elif next_move['y'] < my_head['y']:
+                dvalue += 10
 
     flood_fill_area = {
         "up":
