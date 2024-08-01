@@ -1,4 +1,4 @@
-eimport logging
+import logging
 import os
 import typing
 from flask import Flask, request, jsonify
@@ -115,7 +115,6 @@ def bfs_shortest_path(game_state, start, food):
 
 
 def move(game_state: typing.Dict) -> typing.Dict:
-
     global rvalue, lvalue, uvalue, dvalue
     rvalue, lvalue, uvalue, dvalue = 0, 0, 0, 0
     my_head = game_state["you"]["body"][0]
@@ -129,21 +128,6 @@ def move(game_state: typing.Dict) -> typing.Dict:
     opponents = []
     for snakes in game_state['board']['snakes']:
         opponents.append(snakes['body'])
-    real_me_body = game_state['board']['snakes'][0]['body']
-
-    for snakes in game_state['board']['snakes']
-        real_opponents = snakes['body']
-    print(real_opponents)
-    if start_snake_count >= 2:
-        real_opponent1_body = game_state['board']['snakes'][1]['body']
-    if start_snake_count >= 3:
-        real_opponent2_body = game_state['board']['snakes'][2]['body']
-    if start_snake_count >= 4:
-        real_opponent3_body = game_state['board']['snakes'][3]['body']
-    if start_snake_count >= 5:
-        real_opponent4_body = game_state['board']['snakes'][4]['body']
-    if start_snake_count >= 6:
-        real_opponent5_body = game_state['board']['snakes'][5]['body']
     #print(opponents[start_snake_count - 1][0])
     #print(my_body[0])
 
@@ -184,35 +168,15 @@ def move(game_state: typing.Dict) -> typing.Dict:
         dvalue -= 100
     if {'x': my_head['x'], 'y': my_head["y"] + 1} in my_body:
         uvalue -= 100
-    
+        
     if start_snake_count >= 2:
-        if {'x': my_head["x"] + 1, 'y': my_head["y"]} in real_opponent1_body:
+        if {'x': my_head["x"] + 1, 'y': my_head["y"]} in opponents[1]:
             rvalue -= 100
-        if {'x': my_head["x"] - 1, 'y': my_head["y"]} in real_opponent1_body:
+        if {'x': my_head["x"] - 1, 'y': my_head["y"]} in opponents[1]:
             lvalue -= 100
-        if {'x': my_head['x'], 'y': my_head["y"] - 1} in real_opponent1_body:
+        if {'x': my_head['x'], 'y': my_head["y"] - 1} in opponents[1]:
             dvalue -= 100
-        if {'x': my_head['x'], 'y': my_head["y"] + 1} in real_opponent1_body:
-            uvalue -= 100
-            
-    if start_snake_count >= 3:
-        if {'x': my_head["x"] + 1, 'y': my_head["y"]} in real_opponent2_body:
-            rvalue -= 100
-        if {'x': my_head["x"] - 1, 'y': my_head["y"]} in real_opponent2_body:
-            lvalue -= 100
-        if {'x': my_head['x'], 'y': my_head["y"] - 1} in real_opponent2_body:
-            dvalue -= 100
-        if {'x': my_head['x'], 'y': my_head["y"] + 1} in real_opponent2_body:
-            uvalue -= 100
-
-    if start_snake_count >= 4:
-        if {'x': my_head["x"] + 1, 'y': my_head["y"]} in real_opponent3_body:
-            rvalue -= 100
-        if {'x': my_head["x"] - 1, 'y': my_head["y"]} in real_opponent3_body:
-            lvalue -= 100
-        if {'x': my_head['x'], 'y': my_head["y"] - 1} in real_opponent3_body:
-            dvalue -= 100
-        if {'x': my_head['x'], 'y': my_head["y"] + 1} in real_opponent3_body:
+        if {'x': my_head['x'], 'y': my_head["y"] + 1} in opponents[1]:
             uvalue -= 100
     else:
         pass
