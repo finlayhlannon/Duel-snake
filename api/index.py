@@ -115,7 +115,7 @@ def bfs_shortest_path(game_state, start, food):
 
 
 def move(game_state: typing.Dict) -> typing.Dict:
-    print(opponents[1])
+
     global rvalue, lvalue, uvalue, dvalue
     rvalue, lvalue, uvalue, dvalue = 0, 0, 0, 0
     my_head = game_state["you"]["body"][0]
@@ -127,6 +127,7 @@ def move(game_state: typing.Dict) -> typing.Dict:
     my_tail = my_body[-1]
     food = game_state['board']['food']
     opponents = []
+    print(opponents[1])
     for snakes in game_state['board']['snakes']:
         opponents.append(snakes['body'])
     #print(opponents[start_snake_count - 1][0])
