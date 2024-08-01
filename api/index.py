@@ -168,6 +168,37 @@ def move(game_state: typing.Dict) -> typing.Dict:
         dvalue -= 100
     if {'x': my_head['x'], 'y': my_head["y"] + 1} in my_body:
         uvalue -= 100
+    opponent_bodies = [snake['body'] for snake in game_state['board']['snakes'] if snake['id'] != game_state['you']['id']]
+    directions = {
+        "right": {'x': my_head["x"] + 1, 'y': my_head["y"]},
+        "left": {'x': my_head["x"] - 1, 'y': my_head["y"]},
+        "up": {'x': my_head["x"], 'y': my_head["y"] + 1},
+        "down": {'x': my_head["x"], 'y': my_head["y"] - 1}
+    }
+    for direction, next_pos in directions.items():
+        if 0 <= next_pos['x'] < board_width and 0 <= next_pos['y'] < board_height:
+            if next_pos in my_body:
+                if next_pos == my_body[-1] and health <= 99:
+                    continue  # Allow moving into your tail if low health
+                if direction == "right":
+                    rvalue -= 100
+                elif direction == "left":
+                    lvalue -= 100
+                elif direction == "up":
+                    uvalue -= 100
+                elif direction == "down":
+                    dvalue -= 100
+            else:
+                for opponent_body in opponent_bodies:
+                    if next_pos in opponent_body:
+                        if direction == "right":
+                            rvalue -= 100
+                        elif direction == "left":
+                            lvalue -= 100
+                        elif direction == "up":
+                            uvalue -= 100
+                        elif direction == "down":
+                            dvalue -= 100
         
     if start_snake_count >= 2:
         if {'x': my_head["x"] + 1, 'y': my_head["y"]} in opponents[1]:
