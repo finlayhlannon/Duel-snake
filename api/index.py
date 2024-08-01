@@ -115,6 +115,7 @@ def bfs_shortest_path(game_state, start, food):
 
 
 def move(game_state: typing.Dict) -> typing.Dict:
+    print(opponents[1])
     global rvalue, lvalue, uvalue, dvalue
     rvalue, lvalue, uvalue, dvalue = 0, 0, 0, 0
     my_head = game_state["you"]["body"][0]
@@ -168,7 +169,7 @@ def move(game_state: typing.Dict) -> typing.Dict:
         dvalue -= 100
     if {'x': my_head['x'], 'y': my_head["y"] + 1} in my_body:
         uvalue -= 100
-        
+    
     if start_snake_count >= 2:
         if {'x': my_head["x"] + 1, 'y': my_head["y"]} in opponents[1]:
             rvalue -= 100
