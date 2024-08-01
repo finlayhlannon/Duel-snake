@@ -127,9 +127,9 @@ def move(game_state: typing.Dict) -> typing.Dict:
     my_tail = my_body[-1]
     food = game_state['board']['food']
     opponents = []
-    print(opponents[1])
     for snakes in game_state['board']['snakes']:
         opponents.append(snakes['body'])
+    print(opponents[1])
     #print(opponents[start_snake_count - 1][0])
     #print(my_body[0])
 
