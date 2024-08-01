@@ -503,13 +503,13 @@ def move(game_state: typing.Dict) -> typing.Dict:
             if my_body_length > opponent1_length:
                 print("Im the biggest bird")
                 if next_move['x'] > my_head['x']:
-                    rvalue -= 10
+                    rvalue += 10
                 elif next_move['x'] < my_head['x']:
-                    lvalue -= 10
+                    lvalue += 10
                 elif next_move['y'] > my_head['y']:
-                    uvalue -= 10
+                    uvalue += 10
                 elif next_move['y'] < my_head['y']:
-                    dvalue -= 10
+                    dvalue += 10
             else:
                 print("Im the smallest bird")
                 if next_move['x'] > my_head['x']:
