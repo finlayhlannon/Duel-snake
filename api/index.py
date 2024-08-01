@@ -183,6 +183,7 @@ def move(game_state: typing.Dict) -> typing.Dict:
 
     # Straight head-on collision
     if start_snake_count == 1:
+        
         pass
     elif start_snake_count >= 2 and len(opponents) > 1:
         opponent1_length = len(opponents[1])
@@ -493,11 +494,14 @@ def move(game_state: typing.Dict) -> typing.Dict:
             lvalue += 2
         else:
             lvalue -= 2
-
+    for snakes in game_state['board']['snakes']:
+        if my_body_length > opponent[snakes]['length']
+            print("Im the biggest bird")
     # BFS for food
     nearest_food_path = bfs_shortest_path(game_state, my_head, set((f['x'], f['y']) for f in food))
     if nearest_food_path and len(nearest_food_path) > 1:
         next_move = nearest_food_path[1]
+        
         if next_move['x'] > my_head['x']:
             rvalue += 10
         elif next_move['x'] < my_head['x']:
