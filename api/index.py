@@ -115,6 +115,7 @@ def bfs_shortest_path(game_state, start, food):
 
 
 def move(game_state: typing.Dict) -> typing.Dict:
+    start_snake_count = len(game_state['board']['snakes'])
     global rvalue, lvalue, uvalue, dvalue
     rvalue, lvalue, uvalue, dvalue = 0, 0, 0, 0
     my_head = game_state["you"]["body"][0]
