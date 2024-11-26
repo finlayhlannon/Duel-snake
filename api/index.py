@@ -222,108 +222,108 @@ def move(game_state: typing.Dict) -> typing.Dict:
 
         if {'x': my_head["x"] + 2, 'y': my_head["y"]} == opponents[1][0]:
             if my_body_length <= opponent1_length:
-                rvalue -= 100
+                rvalue -= 200
             else:
-                rvalue += 100
+                rvalue += 200
         if {'x': my_head["x"] - 2, 'y': my_head["y"]} == opponents[1][0]:
             if my_body_length <= opponent1_length:
-                lvalue -= 100
+                lvalue -= 200
             else:
-                lvalue += 100
+                lvalue += 200
         if {'x': my_head['x'], 'y': my_head["y"] - 2} == opponents[1][0]:
             if my_body_length <= opponent1_length:
-                dvalue -= 100
+                dvalue -= 200
             else:
-                dvalue += 100
+                dvalue += 200
         if {'x': my_head['x'], 'y': my_head["y"] + 2} == opponents[1][0]:
             if my_body_length <= opponent1_length:
-                uvalue -= 100
+                uvalue -= 200
             else:
-                uvalue += 100
+                uvalue += 200
         # Corner head-on collision
         if {'x': my_head["x"] - 1, 'y': my_head["y"] + 1} == opponents[1][0]:
             if my_body_length <= opponent1_length:
-                lvalue -= 100
-                uvalue -= 100
+                lvalue -= 200
+                uvalue -= 200
             else:
-                lvalue += 100
-                uvalue += 100
+                lvalue += 200
+                uvalue += 200
 
         if {'x': my_head["x"] + 1, 'y': my_head["y"] - 1} == opponents[1][0]:
             if my_body_length <= opponent1_length:
-                rvalue -= 100
-                dvalue -= 100
+                rvalue -= 200
+                dvalue -= 200
             else:
-                rvalue += 100
-                dvalue += 100
+                rvalue += 200
+                dvalue += 200
 
         if {'x': my_head["x"] + 1, 'y': my_head["y"] + 1} == opponents[1][0]:
             if my_body_length <= opponent1_length:
-                rvalue -= 100
-                uvalue -= 100
+                rvalue -= 200
+                uvalue -= 200
             else:
-                rvalue += 100
-                uvalue += 100
+                rvalue += 200
+                uvalue += 200
 
         if {'x': my_head['x'] - 1, 'y': my_head["y"] - 1} == opponents[1][0]:
             if my_body_length <= opponent1_length:
-                dvalue -= 100
-                lvalue -= 100
+                dvalue -= 200
+                lvalue -= 200
             else:
-                dvalue += 100
-                lvalue += 100
+                dvalue += 200
+                lvalue += 200
 
     elif start_snake_count >= 3 and len(opponents) > 2:
         opponent2_length = len(opponents[2])
 
         if {'x': my_head["x"] + 2, 'y': my_head["y"]} == opponents[2][0]:
             if my_body_length <= opponent2_length:
-                rvalue -= 100
+                rvalue -= 200
             
         if {'x': my_head["x"] - 2, 'y': my_head["y"]} == opponents[2][0]:
             if my_body_length <= opponent2_length:
-                lvalue -= 100
+                lvalue -= 200
             else:
                 lvalue += 0
         if {'x': my_head['x'], 'y': my_head["y"] - 2} == opponents[2][0]:
             if my_body_length <= opponent2_length:
-                dvalue -= 100
+                dvalue -= 200
             else:
                 dvalue += 0
         if {'x': my_head['x'], 'y': my_head["y"] + 2} == opponents[2][0]:
             if my_body_length <= opponent2_length:
-                uvalue -= 100
+                uvalue -= 200
             else:
                 uvalue += 0
         # Corner head-on collision
         if {'x': my_head["x"] - 1, 'y': my_head["y"] + 1} == opponents[2][0]:
             if my_body_length <= opponent2_length:
-                lvalue -= 100
-                uvalue -= 100
+                lvalue -= 200
+                uvalue -= 200
             else:
                 lvalue += 0
                 uvalue += 0
 
         if {'x': my_head["x"] + 1, 'y': my_head["y"] - 1} == opponents[2][0]:
             if my_body_length <= opponent2_length:
-                rvalue -= 100
-                dvalue -= 100
+                rvalue -= 200
+                dvalue -= 200
             else:
                 rvalue += 0
                 dvalue += 0
 
         if {'x': my_head["x"] + 1, 'y': my_head["y"] + 1} == opponents[2][0]:
             if my_body_length <= opponent2_length:
-                rvalue -= 100
-                uvalue -= 100
+                rvalue -= 200
+                uvalue -= 200
             else:
                 rvalue += 0
                 uvalue += 0
 
         if {'x': my_head['x'] - 1, 'y': my_head["y"] - 1} == opponents[2][0]:
             if my_body_length <= opponent2_length:
-                dvalue -= 100
-                lvalue -= 100
+                dvalue -= 200
+                lvalue -= 200
             else:
                 dvalue += 0
                 lvalue += 0
@@ -333,53 +333,53 @@ def move(game_state: typing.Dict) -> typing.Dict:
 
         if {'x': my_head["x"] + 2, 'y': my_head["y"]} == opponents[3][0]:
             if my_body_length <= opponent3_length:
-                rvalue -= 100
+                rvalue -= 200
             else:
                 rvalue += 0
         if {'x': my_head["x"] - 2, 'y': my_head["y"]} == opponents[3][0]:
             if my_body_length <= opponent3_length:
-                lvalue -= 100
+                lvalue -= 200
             else:
                 lvalue += 0
         if {'x': my_head['x'], 'y': my_head["y"] - 2} == opponents[3][0]:
             if my_body_length <= opponent3_length:
-                dvalue -= 100
+                dvalue -= 200
             else:
                 dvalue += 0
         if {'x': my_head['x'], 'y': my_head["y"] + 2} == opponents[3][0]:
             if my_body_length <= opponent3_length:
-                uvalue -= 100
+                uvalue -= 200
             else:
                 uvalue += 0
         # Corner head-on collision
         if {'x': my_head["x"] - 1, 'y': my_head["y"] + 1} == opponents[3][0]:
             if my_body_length <= opponent3_length:
-                lvalue -= 100
-                uvalue -= 100
+                lvalue -= 200
+                uvalue -= 200
             else:
                 lvalue += 0
                 uvalue += 0
 
         if {'x': my_head["x"] + 1, 'y': my_head["y"] - 1} == opponents[3][0]:
             if my_body_length <= opponent3_length:
-                rvalue -= 100
-                dvalue -= 100
+                rvalue -= 200
+                dvalue -= 200
             else:
                 rvalue +=0
                 dvalue += 0
 
         if {'x': my_head["x"] + 1, 'y': my_head["y"] + 1} == opponents[3][0]:
             if my_body_length <= opponent3_length:
-                rvalue -= 100
-                uvalue -= 100
+                rvalue -= 200
+                uvalue -= 200
             else:
                 rvalue += 0
                 uvalue += 0
 
         if {'x': my_head['x'] - 1, 'y': my_head["y"] - 1} == opponents[3][0]:
             if my_body_length <= opponent3_length:
-                dvalue -= 100
-                lvalue -= 100
+                dvalue -= 200
+                lvalue -= 200
             else:
                 dvalue += 0
                 lvalue += 0
@@ -389,56 +389,56 @@ def move(game_state: typing.Dict) -> typing.Dict:
 
         if {'x': my_head["x"] + 2, 'y': my_head["y"]} == opponents[4][0]:
             if my_body_length <= opponent4_length:
-                rvalue -= 100
+                rvalue -= 200
             else:
-                rvalue += 100
+                rvalue += 50
         if {'x': my_head["x"] - 2, 'y': my_head["y"]} == opponents[4][0]:
             if my_body_length <= opponent4_length:
-                lvalue -= 100
+                lvalue -= 200
             else:
-                lvalue += 100
+                lvalue += 50
         if {'x': my_head['x'], 'y': my_head["y"] - 2} == opponents[4][0]:
             if my_body_length <= opponent4_length:
-                dvalue -= 100
+                dvalue -= 200
             else:
-                dvalue += 100
+                dvalue += 200
         if {'x': my_head['x'], 'y': my_head["y"] + 2} == opponents[4][0]:
             if my_body_length <= opponent4_length:
-                uvalue -= 100
+                uvalue -= 50
             else:
-                uvalue += 100
+                uvalue += 50
         # Corner head-on collision
         if {'x': my_head["x"] - 1, 'y': my_head["y"] + 1} == opponents[4][0]:
             if my_body_length <= opponent4_length:
-                lvalue -= 100
-                uvalue -= 100
+                lvalue -= 200
+                uvalue -= 200
             else:
-                lvalue += 100
-                uvalue += 100
+                lvalue += 50
+                uvalue += 50
 
         if {'x': my_head["x"] + 1, 'y': my_head["y"] - 1} == opponents[4][0]:
             if my_body_length <= opponent4_length:
-                rvalue -= 100
-                dvalue -= 100
+                rvalue -= 200
+                dvalue -= 200
             else:
-                rvalue += 100
-                dvalue += 100
+                rvalue += 50
+                dvalue += 50
 
         if {'x': my_head["x"] + 1, 'y': my_head["y"] + 1} == opponents[4][0]:
             if my_body_length <= opponent4_length:
-                rvalue -= 100
-                uvalue -= 100
+                rvalue -= 200
+                uvalue -= 200
             else:
-                rvalue += 100
-                uvalue += 100
+                rvalue += 50
+                uvalue += 50
 
         if {'x': my_head['x'] - 1, 'y': my_head["y"] - 1} == opponents[4][0]:
             if my_body_length <= opponent4_length:
-                dvalue -= 100
-                lvalue -= 100
+                dvalue -= 200
+                lvalue -= 200
             else:
-                dvalue += 100
-                lvalue += 100
+                dvalue += 50
+                lvalue += 50
 
     else:
         print("wtf why are there so many snakes")
