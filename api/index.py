@@ -240,7 +240,7 @@ def info() -> typing.Dict:
     print("INFO")
     return {
         "apiversion": "1",
-        "author": "Improved Snake",  # TODO: Your name here
+        "author": "Finlay",  # TODO: Your name here
         "color": "#12A434",
         "head": "lantern-fish",
         "tail": "do-sammy",
