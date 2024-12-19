@@ -1,8 +1,49 @@
+import logging
+import os
 import typing
+from flask import Flask, request, jsonify
+from collections import deque
 from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, List, Set, Tuple, Optional
 
+# Initialize Flask app
+app = Flask(__name__)
+
+# Flask routes
+@app.get("/")
+def on_info():
+    return info()
+
+@app.post("/start")
+def on_start():
+    game_state = request.get_json()
+    start(game_state)
+    return "ok"
+
+@app.post("/move")
+def on_move():
+    game_state = request.get_json()
+    return move(game_state)
+
+@app.post("/end")
+def on_end():
+    game_state = request.get_json()
+    end(game_state)
+    return "ok"
+
+@app.after_request
+def identify_server(response):
+    response.headers.set("server", "battlesnake/github/starter-snake-python")
+    return response
+
+@app.errorhandler(500)
+def internal_error(error):
+    response = jsonify({"message": "Internal server error", "error": str(error)})
+    response.status_code = 500
+    return response
+
+# Game logic classes
 class Direction(Enum):
     UP = "up"
     DOWN = "down"
@@ -88,6 +129,11 @@ class MovementStrategy:
                 else:
                     safety_score += 25
 
+        # Additional safety calculations for tight spaces using flood fill
+        space_score = self._calculate_flood_fill(pos)
+        if space_score < self.my_length:
+            safety_score -= (self.my_length - space_score) * 10
+
         # Penalize moves close to walls
         if pos.x == 0 or pos.x == self.board_width - 1:
             safety_score -= 20
@@ -95,6 +141,42 @@ class MovementStrategy:
             safety_score -= 20
 
         return safety_score
+
+    def _calculate_flood_fill(self, start_pos: Position) -> int:
+        """Calculate available space using flood fill algorithm."""
+        visited = set()
+        queue = deque([start_pos])
+        space = 0
+
+        while queue:
+            pos = queue.popleft()
+            if (pos.x, pos.y) in visited:
+                continue
+
+            if not self._is_valid_position(pos):
+                continue
+
+            # Check if position is occupied by any snake
+            occupied = False
+            for snake in self.game_state['board']['snakes']:
+                if any(pos.x == segment['x'] and pos.y == segment['y'] 
+                      for segment in snake['body'][:-1]):  # Exclude tail
+                    occupied = True
+                    break
+
+            if occupied:
+                continue
+
+            visited.add((pos.x, pos.y))
+            space += 1
+
+            # Add adjacent positions
+            queue.append(Position(pos.x + 1, pos.y))
+            queue.append(Position(pos.x - 1, pos.y))
+            queue.append(Position(pos.x, pos.y + 1))
+            queue.append(Position(pos.x, pos.y - 1))
+
+        return space
 
     def _is_adjacent(self, pos1: Position, pos2: Position) -> bool:
         """Check if two positions are adjacent."""
@@ -153,7 +235,24 @@ class MovementStrategy:
         distance = abs(pos.x - food.x) + abs(pos.y - food.y)
         return max(50 - distance * 5, 0)  # Decreasing score with distance
 
-def move(game_state: Dict) -> Dict:
+# Game state functions
+def info() -> typing.Dict:
+    print("INFO")
+    return {
+        "apiversion": "1",
+        "author": "Improved Snake",  # TODO: Your name here
+        "color": "#12A434",
+        "head": "lantern-fish",
+        "tail": "do-sammy",
+    }
+
+def start(game_state: typing.Dict):
+    print(f"GAME START -> {game_state['game']['id']}")
+
+def end(game_state: typing.Dict):
+    print(f"GAME OVER -> {game_state['game']['id']}")
+
+def move(game_state: typing.Dict) -> typing.Dict:
     """Main move function."""
     strategy = MovementStrategy(game_state)
     
@@ -166,4 +265,17 @@ def move(game_state: Dict) -> Dict:
     # Choose the best move
     best_move = max(moves.items(), key=lambda x: x[1])
     
+    # Debug logging
+    print(f"Moves evaluation: {moves}")
+    print(f"Chosen move: {best_move[0].value} with score {best_move[1]}")
+    
     return {"move": best_move[0].value}
+
+if __name__ == "__main__":
+    host = "0.0.0.0"
+    port = int(os.environ.get("PORT", "8000"))
+    
+    logging.getLogger("werkzeug").setLevel(logging.ERROR)
+    
+    print(f"\nRunning Battlesnake at http://{host}:{port}")
+    app.run(host=host, port=port)
