@@ -144,39 +144,75 @@ class MovementStrategy:
 
     def _calculate_flood_fill(self, start_pos: Position) -> int:
         """Calculate available space using flood fill algorithm."""
-        visited = set()
-        queue = deque([start_pos])
-        space = 0
+        board = [[0] * self.board_height for _ in range(self.board_width)]
+        
+        # Mark all snake bodies on the board
+        for snake in self.game_state['board']['snakes']:
+            # Don't consider the tail as an obstacle if we're not going to grow
+            segments_to_mark = snake['body'][:-1] if snake['id'] == self.my_snake['id'] and self.health < 100 else snake['body']
+            for segment in segments_to_mark:
+                board[segment['x']][segment['y']] = 1
 
-        while queue:
-            pos = queue.popleft()
-            if (pos.x, pos.y) in visited:
-                continue
+        def flood_fill_recursive(x: int, y: int, visited: set) -> int:
+            # Check boundaries and obstacles
+            if (x, y) in visited or \
+               x < 0 or x >= self.board_width or \
+               y < 0 or y >= self.board_height or \
+               board[x][y] == 1:
+                return 0
+            
+            visited.add((x, y))
+            
+            # Recursively explore all directions
+            space = 1
+            for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+                space += flood_fill_recursive(x + dx, y + dy, visited)
+            
+            return space
 
-            if not self._is_valid_position(pos):
-                continue
+        return flood_fill_recursive(start_pos.x, start_pos.y, set())
 
-            # Check if position is occupied by any snake
-            occupied = False
-            for snake in self.game_state['board']['snakes']:
-                if any(pos.x == segment['x'] and pos.y == segment['y'] 
-                      for segment in snake['body'][:-1]):  # Exclude tail
-                    occupied = True
-                    break
+    def _calculate_position_safety(self, pos: Position) -> float:
+        """Calculate safety score for a position."""
+        safety_score = 100.0
 
-            if occupied:
-                continue
+        # Check for immediate collisions with snake bodies
+        for snake in self.game_state['board']['snakes']:
+            for segment in snake['body'][:-1]:  # Exclude tail
+                if pos.x == segment['x'] and pos.y == segment['y']:
+                    return float('-inf')
 
-            visited.add((pos.x, pos.y))
-            space += 1
+        # Calculate available space using flood fill
+        available_space = self._calculate_flood_fill(pos)
+        
+        # Strongly penalize moves that lead to spaces smaller than our length
+        if available_space <= self.my_length:
+            safety_score -= max(0, (self.my_length - available_space) * 30)
+        
+        # Give bonus for moves that lead to larger spaces
+        else:
+            safety_score += min(50, available_space / 2)
 
-            # Add adjacent positions
-            queue.append(Position(pos.x + 1, pos.y))
-            queue.append(Position(pos.x - 1, pos.y))
-            queue.append(Position(pos.x, pos.y + 1))
-            queue.append(Position(pos.x, pos.y - 1))
+        # Check for potential head-to-head collisions
+        for opponent in self.opponents:
+            opponent_head = Position(opponent['body'][0]['x'], opponent['body'][0]['y'])
+            opponent_length = len(opponent['body'])
+            
+            if self._is_adjacent(pos, opponent_head):
+                # If we're smaller or equal size, strongly avoid head-to-head
+                if self.my_length <= opponent_length:
+                    safety_score -= 150
+                # If we're larger, slightly prefer head-to-head
+                else:
+                    safety_score += 25
 
-        return space
+        # Penalize moves close to walls, but less severely than before
+        if pos.x == 0 or pos.x == self.board_width - 1:
+            safety_score -= 10
+        if pos.y == 0 or pos.y == self.board_height - 1:
+            safety_score -= 10
+
+        return safety_score
 
     def _is_adjacent(self, pos1: Position, pos2: Position) -> bool:
         """Check if two positions are adjacent."""
